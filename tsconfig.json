@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "outDir": "out",
+    "allowSyntheticDefaultImports": true,
+    "module": "CommonJS",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "sourceMap": true,
+    "target": "ESNext",
+    "resolveJsonModule": true,
+    "strict": true,
+    "allowJs": true,
+    "strictNullChecks": false
+  },
+  "include": ["src"]
+}
