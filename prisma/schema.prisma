@@ -1,0 +1,44 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Guild {
+  id       String @id @unique
+  nickname String @default("Bob")
+
+  roles    Role[]
+  channels Channel[]
+}
+
+model Role {
+  id      String  @id @unique
+  Guild   Guild?  @relation(fields: [guildId], references: [id])
+  guildId String?
+  rank    String
+  perms   Json
+}
+
+model Channel {
+  id      String  @id @unique
+  type    String
+  Guild   Guild?  @relation(fields: [guildId], references: [id])
+  guildId String?
+}
+
+model User {
+  id      String        @id @unique @db.VarChar(32)
+  members GuildMember[]
+}
+
+model GuildMember {
+  id      Int      @id @unique @default(autoincrement())
+  user    User     @relation(fields: [userId], references: [id])
+  userId  String
+  guildId String
+  roles   String[]
+}
