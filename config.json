@@ -1,5 +1,20 @@
 {
   "owner": {
-    "id": "718930767740403753"
+    "id": "718930767740403753",
+    "username": "faceboy"
+  },
+  "website": {
+    "url": "https://faceboy.dev/bob/",
+    "tos":"https://faceboy.dev/bob/terms",
+    "privacy":"https://faceboy.dev/bob/privacy"
+  },
+  "server": "https://discord.gg/33Aw6gWmmV",
+  "leveling": {
+    "maxXp": 113126281,
+    "maxRank": 500,
+    "maxXpPerMessage": 500,
+    "idealMessageLength": 500,
+    "messageExpiry": 21600000,
+    "_comment": "this is 6 hours here"
   }
 }

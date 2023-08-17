@@ -1,5 +1,6 @@
 import { ChatInput, CommandData, CommandType, Ctx, Executable, OptionType } from "../../classes/Command";
 import Bot from "../../classes/Bot";
+import { escapeMarkdown } from "discord.js";
 
 // Static data about the command
 const data: CommandData = {
@@ -38,6 +39,7 @@ class Impl extends Executable {
       update: { nickname: nick },
     });
     i.reply("k, done");
+    ctx.logAction({ message: `Changed nickname to \`${escapeMarkdown(nick)}\``, userId: i.user.id });
   }
 }
 

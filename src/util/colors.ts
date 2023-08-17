@@ -1,0 +1,21 @@
+export default {
+  Red: 0xff2929,
+  Coral: 0xff6d50,
+  Orange: 0xffa200,
+  Gold: 0xf0b132,
+  Yellow: 0xeeff00,
+  Lime: 0x00ff1a,
+  Green: 0x18cc54,
+  Aqua: 0x00ffae,
+  Cyan: 0x0ce8e8,
+  Cornflower: 0x008cff,
+  Blue: 0x004cff,
+  Purple: 0x9500ff,
+  Blurple: 0x6064f4,
+  Magenta: 0xe100ff,
+  White: 0xffffff,
+  Black: 0x000000,
+  LightGray: 0xa0a0a5,
+  DarkGray: 0x454549,
+  Invis: 0x2b2d31
+}

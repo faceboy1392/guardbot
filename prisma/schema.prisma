@@ -11,23 +11,59 @@ model Guild {
   id       String @id @unique
   nickname String @default("Bob")
 
-  roles    Role[]
-  channels Channel[]
+  logChannelId String?
+  logs         Log[]
+
+  members GuildMember[]
+
+  // Leveling settings
+  levelingEnabled      Boolean @default(false)
+  levelingRoleStacking Boolean @default(false)
+  persistLevelingRoles Boolean @default(false)
+
+  xpMultiplier        Float     @default(1.0)
+  xpMultiplierEndDate DateTime?
+
+  levelingExponentialFactor Float @default(1.0)
+
+  levelingRoles LevelingRole[]
+  noXpRoles     NoXpRole[]
+  noXpChannels  NoXpChannel[]
 }
 
-model Role {
-  id      String  @id @unique
-  Guild   Guild?  @relation(fields: [guildId], references: [id])
-  guildId String?
-  rank    String
-  perms   Json
+model Log {
+  id String @id @unique @default(uuid())
+
+  Guild   Guild  @relation(fields: [guildId], references: [id])
+  guildId String
+
+  message String
+  userId  String?
+  data    Json?
+
+  timestamp DateTime @default(now())
 }
 
-model Channel {
-  id      String  @id @unique
-  type    String
-  Guild   Guild?  @relation(fields: [guildId], references: [id])
-  guildId String?
+model LevelingRole {
+  id      String @id @unique
+  Guild   Guild  @relation(fields: [guildId], references: [id])
+  guildId String
+
+  rank Int
+
+  @@unique([guildId, rank])
+}
+
+model NoXpRole {
+  id      String @id @unique
+  Guild   Guild  @relation(fields: [guildId], references: [id])
+  guildId String
+}
+
+model NoXpChannel {
+  id      String @id @unique
+  Guild   Guild  @relation(fields: [guildId], references: [id])
+  guildId String
 }
 
 model User {
@@ -36,9 +72,74 @@ model User {
 }
 
 model GuildMember {
-  id      Int      @id @unique @default(autoincrement())
-  user    User     @relation(fields: [userId], references: [id])
+  User    User   @relation(fields: [userId], references: [id])
   userId  String
+  Guild   Guild  @relation(fields: [guildId], references: [id])
   guildId String
-  roles   String[]
+
+  roles       String[]
+  actions     MemberEvent[]
+  infractions Infraction[]
+
+  // Leveling stuff
+  xp                   Int       @default(0)
+  rank                 Int       @default(0)
+  lastMessageTimestamp DateTime? @default(now())
+
+  @@id([userId, guildId])
+}
+
+model MemberEvent {
+  id String @id @default(uuid())
+
+  GuildMember        GuildMember? @relation(fields: [guildMemberUserId, guildMemberGuildId], references: [userId, guildId])
+  guildMemberUserId  String?
+  guildMemberGuildId String?
+
+  type MemberEventType
+  date DateTime        @default(now())
+
+  customData Json?
+}
+
+//! NOTE I DONT LIKE THIS MemberEvent STUFF, TODO REFACTOR
+
+enum MemberEventType {
+  JOIN
+  LEAVE
+  SELF_NICKNAME
+  MOD_NICKNAME // nickname changed by a moderator
+  ROLE_ADD
+  ROLE_REMOVE
+  CREATE_INVITE
+  AUTOMOD
+  INFRACTION
+}
+
+model Infraction {
+  id String @id @default(uuid())
+
+  GuildMember        GuildMember? @relation(fields: [guildMemberUserId, guildMemberGuildId], references: [userId, guildId])
+  guildMemberUserId  String?
+  guildMemberGuildId String?
+
+  type         InfractionType
+  date         DateTime       @default(now())
+  reason       String?
+  moderatorId  String
+  moderatorTag String
+  description  String
+  customData   Json?
+  resolved     Boolean        @default(false)
+}
+
+enum InfractionType {
+  NOTICE
+  DETAIN
+  WARN
+  MUTE
+  KICK
+  HARDKICK
+  TEMPBAN
+  BAN
 }

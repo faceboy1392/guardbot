@@ -11,8 +11,8 @@ import glob from "glob";
 
 const bot = new Bot({
   partials: [Partials.Channel, Partials.User, Partials.GuildMember],
-  intents: [Intents.Flags.Guilds],
-  allowedMentions: { parse: ["everyone"] },
+  intents: [Intents.Flags.Guilds, Intents.Flags.GuildPresences, Intents.Flags.GuildMessages, Intents.Flags.MessageContent],
+  allowedMentions: { parse: [] },
 });
 
 export default bot;
